@@ -142,6 +142,8 @@ def thread_Principal():
             
             elif msg_type == "GLOBAL_POSITION_INT":
                
+                gps_xy_final = obj_gps.get_PontoFinal()
+                
                 '''
                 lat = float(msg.lat)/10000000
                 lon = float(msg.lon)/10000000
@@ -151,7 +153,7 @@ def thread_Principal():
                 gps_xy_atual = obj_filtros.Filtro_IIR(0.3, gps_xy_anterior, gps_xy_atual_bruto)                     
                 '''
                 
-                
+              
                 if(gps_xy_anterior != gps_xy_atual):
                     erro = obj_calc_algebra.get_AnguloVetores_Unitario_graus(gps_xy_atual, gps_xy_final, anguloGiro)
                     #erro = obj_calc_algebra.get_AnguloVetores_graus(gps_xy_anterior, gps_xy_atual, gps_xy_final)
@@ -234,7 +236,16 @@ def animate(i):
     ax.plot(x, y, color='blue')
     ax.plot(x2, y2, color='orange')
       
-
+def SalvarNovoPontoFinal():
+    
+    campo_lat = float(GPS_Final_input_lat.get())
+    campo_lon = float(GPS_Final_input_lon.get())
+    
+    if(campo_lat!='' and campo_lon!=''):
+        obj_gps.set_PontoFinal(campo_lat,campo_lon)
+    else:
+        print('Preencha os campos lat e lon')
+   
 
 def GerarCSV(df):
     
@@ -312,6 +323,19 @@ try:
     correcaoErro = Label(tk, text=der_erro)
     correcaoErro.grid(column=5,row=6)
     
+    texto_GPS_Final_input = Label(tk, text='Final (Latitude): ')
+    texto_GPS_Final_input.grid(column=3,row=7,padx=10,pady=10)
+    GPS_Final_input_lat = Entry(tk)
+    GPS_Final_input_lat.grid(column=3,row=8)
+    
+    texto_GPS_Final_input = Label(tk, text='Final (Longitude): ')
+    texto_GPS_Final_input.grid(column=4,row=7,padx=10,pady=10)
+    GPS_Final_input_lon = Entry(tk)
+    GPS_Final_input_lon.grid(column=4,row=8)
+    
+    botaoPonto = Button(tk, text="Novo Ponto Final", command=SalvarNovoPontoFinal)
+    botaoPonto.grid(column=2,row=9,padx=10,pady=10)
+    
     '''
     x = [gps_xy_anterior[0],gps_xy_atual[0],gps_xy_final[0]]
     y = [gps_xy_anterior[1],gps_xy_atual[1],gps_xy_final[1]]
@@ -327,7 +351,7 @@ try:
     canvas.get_tk_widget().grid(column=2,row=8,columnspan=4, rowspan=11,padx=10,pady=10)   
     '''
     canvas = FigureCanvasTkAgg(fig, master=tk)
-    canvas.get_tk_widget().grid(column=2,row=8,columnspan=4, rowspan=11,padx=10,pady=10)
+    canvas.get_tk_widget().grid(column=2,row=10,columnspan=4, rowspan=11,padx=10,pady=10)
     
     ani = animation.FuncAnimation(fig, animate, interval=1000)
    

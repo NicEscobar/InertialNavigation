@@ -11,8 +11,7 @@ import utm
 class GPS():
         
      
-    def __init__(self):
-        
+    def __init__(self):        
         self.sp_utmYX = utm.from_latlon(-22.256714, -45.695668) #lat,lon
         self.pontoFinal_utmXY = [self.sp_utmYX[1],self.sp_utmYX[0]]
         
@@ -26,12 +25,20 @@ class GPS():
         CoordenadasYX = utm.from_latlon(latitude, longitude)
         CoordenadasXY = [CoordenadasYX[1],CoordenadasYX[0]]
         
+        print('CoordenadasYX',CoordenadasYX)
+        
         return CoordenadasXY
     
     def get_PontoFinal(self):
         
         return self.pontoFinal_utmXY
     
+    def set_PontoFinal(self, lat, lon):
+        
+        coord = self.Conversao_Geograficas_UTM(lat, lon)
+        print('coord',coord)
+        self.pontoFinal_utmXY = [coord[1], coord[0]]
+            
     def get_teste_PontoFinal(self):
         
         pontoFinal_utmXY = [0,5]
