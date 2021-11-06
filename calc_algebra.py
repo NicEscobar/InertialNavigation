@@ -37,9 +37,15 @@ class Calc_Algebra():
         mod_AB = self.get_Modulo(vetorAB[0], vetorAB[1])
         mod_C = self.get_Modulo(vetorBC[0], vetorBC[1])
         
-        angulo = np.arccos(((vetorAB[0] * vetorBC[0]) + (vetorAB[1] * vetorBC[1]))/(mod_AB * mod_C))
-        angulo_g = (angulo*180)/np.pi
         
+        vet = (vetorAB[0] * vetorBC[0]) + (vetorAB[1] * vetorBC[1])
+        mod = (mod_AB * mod_C)
+        
+        
+        angulo = np.arccos(vet/mod)
+        
+        
+        angulo_g = (angulo*180)/np.pi
         
         return angulo_g
     
@@ -87,17 +93,17 @@ class Calc_Algebra():
     
     def teste_Modulo(self):     
         
-        x = 0
-        y = 0
+        x = 3
+        y = 2
         
         modulo = self.get_Modulo(x,y)
         print('teste_Modulo: ', modulo)
         
     def teste_AnguloVetores_graus(self):     
         
-        A = [0,0]
-        B = [-1,-3]
-        C = [5,5]
+        A = [5277007.66,299828.85]
+        B = [6860109.97,389777.51]
+        C = [7538593.13368571,428321.255205525]
         
         angulo = self.get_AnguloVetores_graus(A, B, C)
         print('angulo: ', angulo)

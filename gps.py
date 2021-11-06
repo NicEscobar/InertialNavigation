@@ -10,9 +10,9 @@ import utm
 
 class GPS():
         
-     
+
     def __init__(self):        
-        self.sp_utmYX = utm.from_latlon(-22.256714, -45.695668) #lat,lon
+        self.sp_utmYX = utm.from_latlon(-22.25817, -45.69578) #lat,lon
         self.pontoFinal_utmXY = [self.sp_utmYX[1],self.sp_utmYX[0]]
         
         
@@ -23,20 +23,36 @@ class GPS():
         #longitude = x
         
         CoordenadasYX = utm.from_latlon(latitude, longitude)
-        CoordenadasXY = [CoordenadasYX[1],CoordenadasYX[0]]
         
-        print('CoordenadasYX',CoordenadasYX)
+        CoordenadasXY_m = [CoordenadasYX[1],CoordenadasYX[0]]
         
-        return CoordenadasXY
+        CoordenadasXY_km = [CoordenadasXY_m[0], CoordenadasXY_m[1]]
+        
+        return CoordenadasXY_km
     
     def get_PontoFinal(self):
         
         return self.pontoFinal_utmXY
     
+    def get_FaixaErroPontoFinal_PN(self, Pfinal):
+        
+        xP = Pfinal[0]*1.000000002
+        yP = Pfinal[1]*1.000000002
+        
+        xN = Pfinal[0]*0.000000098
+        yN = Pfinal[1]*0.000000098
+        
+        max = [xP,yP]
+        min = [xN, yN]
+        
+        vet = [max,min]
+        
+        return vet
+    
     def set_PontoFinal(self, lat, lon):
         
         coord = self.Conversao_Geograficas_UTM(lat, lon)
-        print('coord',coord)
+       
         self.pontoFinal_utmXY = [coord[1], coord[0]]
             
     def get_teste_PontoFinal(self):

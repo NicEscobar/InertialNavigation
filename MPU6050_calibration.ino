@@ -1,5 +1,5 @@
 // Arduino sketch that returns calibration offsets for MPU6050 //   Version 1.1  (31th January 2014)
-// Done by Luis Ródenas <luisrodenaslorda@gmail.com>
+// Done by Luis RÃƒÂ³denas <luisrodenaslorda@gmail.com>
 // Based on the I2Cdev library and previous work by Jeff Rowberg <jeff@rowberg.net>
 // Updates (of the library) should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
 
@@ -67,21 +67,8 @@ void setupCalibration() {
   // initialize device
   accelgyro.initialize();
 
-  // wait for ready
-  while (Serial.available() && Serial.read()); // empty buffer
-  while (!Serial.available()){
-    Serial.println(F("Send any character to start calibration.\n"));
-    delay(1500);
-  }                
-  while (Serial.available() && Serial.read()); // empty buffer again
-
-  // start message
-  Serial.println("\nMPU6050 Calibration Sketch");
-  delay(2000);
-  Serial.println("\nYour MPU6050 should be placed in horizontal position, with package letters facing up. \nDon't touch it until you see a finish message.\n");
-  delay(3000);
   // verify connection
-  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+  Serial.println(accelgyro.testConnection() ? 0 : 1);
   delay(1000);
   // reset offsets
   accelgyro.setXAccelOffset(0);
@@ -95,14 +82,13 @@ void setupCalibration() {
 ///////////////////////////////////   LOOP   ////////////////////////////////////
 void loopCalibration() {
   if (state==0){
-    Serial.println("\nReading sensors for first time...");
     meansensors();
     state++;
     delay(1000);
   }
 
   if (state==1) {
-    Serial.println("\nCalculating offsets...");
+    Serial.println(0);
     calibration();
     state++;
     delay(1000);
@@ -110,7 +96,19 @@ void loopCalibration() {
 
   if (state==2) {
     meansensors();
-    Serial.println("\nFINISHED!");
+    Serial.print("\nSensor readings with offsets:\t");
+    Serial.print(ax_offset); 
+    Serial.print("\t");
+    Serial.print(ay_offset); 
+    Serial.print("\t");
+    Serial.print(az_offset); 
+    Serial.print("\t");
+    Serial.print(gx_offset); 
+    Serial.print("\t");
+    Serial.print(gy_offset); 
+    Serial.print("\t");
+    Serial.println(gz_offset);
+    /*Serial.println("\nFINISHED!");
     Serial.print("\nSensor readings with offsets:\t");
     Serial.print(mean_ax); 
     Serial.print("\t");
@@ -138,7 +136,7 @@ void loopCalibration() {
     Serial.println("\nData is printed as: acelX acelY acelZ giroX giroY giroZ");
     Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
     Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
-    //while (1);
+    while (1);*/
   }
 }
 
@@ -190,7 +188,7 @@ void calibration(){
     accelgyro.setZGyroOffset(gz_offset);
 
     meansensors();
-    Serial.println("...");
+    Serial.println(0);
 
     if (abs(mean_ax)<=acel_deadzone) ready++;
     else ax_offset=ax_offset-mean_ax/acel_deadzone;
@@ -213,3 +211,5 @@ void calibration(){
     if (ready==6) break;
   }
 }
+
+
